@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue Exercise</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+</head>
+<body>
+    <div id="vue-app">
+        <input id="app" v-model="text" placeholder="edit me">
+        <p>Message is: {{ text }}</p>
+
+        <div>
+            <button id="counter" @click="addNumber()">Increment</button>
+            <div> {{ counter }} </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el:'#vue-app',
+            data: {
+                text: 'Hello',
+                counter: 0
+            },
+            beforeCreate: function() {
+                //In the body of the before create method the vue data object will be undefined, as this is not available until the created hook fires.
+                //runs at the initialization of your component - data has not been made reactive, and events have not been set up yet
+                console.log('beforeCreate:', this.text);
+            },
+            created: function() {
+                //runs before the templates and Virtual DOM have been mounted or rendered - you are able to access reactive data and events that are active
+                console.log('created:', this.text);
+            },
+            //Mounting hooks are often the most used hooks.
+            // They allow you to access your component immediately before and after the first render.
+            // They do not, however, run during server-side rendering.
+            beforeMount: function () {
+                //runs right before the initial render happens and after the template or render functions have been compiled
+                console.log('beforeMount:', this.$el.innerText);
+            },
+            mounted: function() {
+                //have full access to the reactive component, templates, and rendered DOM
+                //modifying the DOM—particularly when integrating non-Vue libraries:
+                console.log('mounted:', this.$el.innerText);
+            },
+            //called whenever a reactive property used by your component changes or something else causes it to re-render
+            //allow you to hook into the watch-compute-render cycle for your component
+            beforeUpdate: function() {
+                //runs after data changes on your component and the update cycle begins, right before the DOM is patched and re-rendered
+                //if you need to get the new state of any reactive data on your component before it gets rendered
+                console.log('beforeUpdate', this.$el.innerText);
+            },
+            updated: function() {
+                //render after data changes on your component and the DOM re-render
+                //if you need to access the DOM after a property change
+                console.log('updated', this.$el.innerText);
+            },
+
+            methods: {
+                addNumber: function () {
+                    this.counter++;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

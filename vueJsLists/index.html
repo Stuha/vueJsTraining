@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VueJs Lists</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+</head>
+<body>
+    <div id="vue-app">
+        <div v-if="useLightTheme">
+            <nav :style="lightTheme">
+                <a :style="lightTheme" href="">Employees</a>
+                <a :style="lightTheme" href="">Work schedule</a>
+                <a :style="lightTheme" href="">Workers absence</a>
+            </nav>
+        </div>
+        <div v-else>
+            <nav :style="darkTheme">
+                <a :style="darkTheme" href="">Employees</a>
+                <a :style="darkTheme" href="">Work schedule</a>
+                <a :style="darkTheme" href="">Workers absence</a>
+            </nav>
+        </div>
+
+        <input type="radio" id="lightTheme" name="changeTheme" v-on:click="changeTheme" checked="checked" >
+        <label for="lightTheme"> Light Theme</label>
+        <input type="radio" id="darkTheme" name="changeTheme" v-on:click="changeTheme">
+        <label for="darkTheme"> Dark Theme</label>
+        <input type="checkbox" id="showTable" v-model="showTable" name="showTable">
+        <label for="showTable">{{ tableToggleText }}</label>
+
+        <div v-show="showTable">
+            <table v-for="employee in employees" :key="employee.index">
+                <tr>
+                    <td>{{ employee.name}}</td>
+                    <td>{{ employee.occupation}}</td>
+                </tr>
+            </table>
+            <br>
+            <employees-list
+                    v-for="employee in employees"
+                    :key="employee.id"
+                    :name="employee.name"
+                    :occupation="employee.occupation"
+            ></employees-list>
+        </div>
+    </div>
+    <script>
+        Vue.component('employees-list', {
+            props: ['name', 'occupation'],
+            template: `
+              <table>
+              <tr>
+                <td>{{ name }}</td>
+                <td>{{ occupation }}</td>
+              </tr>
+              </table>
+            `
+        });
+
+        new Vue({
+            el:'#vue-app',
+            data: {
+                darkTheme: {
+                    backgroundColor: 'black',
+                    fontSize: '20px',
+                    color: 'white',
+                    textDecoration: 'none'
+                },
+                lightTheme: {
+                    backgroundColor: 'white',
+                    fontSize: '20px',
+                    color: 'black',
+                    textDecoration: 'none'
+                },
+                employees: [
+                    {id: 1, name: "Sasha", age: "34", occupation: "Developer"},
+                    {id: 2, name: "Tarik", age: "25", occupation: "Designer"},
+                    {id: 3, name: "Admir", age: "26", occupation: "Mobile Developer"},
+                    {id: 4, name: "Selma", age: "33", occupation: "Product Owner"},
+                    {id: 5, name: "Marina", age: "24", occupation: "Office manager"},
+                    {id: 6, name: "Nerma", age: "27", occupation: "Talent acquisition"},
+                    {id: 7, name: "Aida", age: "36", occupation: "People and Culture"},
+                    {id: 8, name: "Medina", age: "32", occupation: "Developer/Team Lead"},
+                ],
+                useLightTheme: true,
+                showTable: true,
+                theme: 'Light Theme',
+                tableToggleText: 'Show table'
+            },
+            methods: {
+                changeTheme: function (event) {
+                    if (event.target.id === 'lightTheme') {
+                        this.useLightTheme = true;
+                    } else {
+                        this.useLightTheme = false;
+                    }
+                },
+            }
+        });
+    </script>
+</body>
+</html>
