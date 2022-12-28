@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app" class="container">
+        <div class="content">
+            <h1 class="title">Select riding level</h1>
+            <plan-picker></plan-picker>
+        </div>
+        <div class="content">
+            <h1 class="title">Select riding params</h1>
+            <input-riding-style ></input-riding-style>
+        </div>
+    </div>
+
+    <script type="text/x-template" id="plan-picker-template">
+        <div class="plans">
+            <plan-picker-item v-for="plan in plans" :key="plan.index" :name="plan" @select="selectPlan" :selected-plan="selectedPlan">
+            </plan-picker-item>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="plan-picker-item-template">
+        <div @click="select" class="plan" :style="{'color': isSelected}">
+            <div class="description">
+              <span class="title">
+                {{name}}
+              </span>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="input-riding-style">
+        <div>
+            <input-riding-style-item @submit="getSubmittedData"></input-riding-style-item>
+
+            <div v-show="showSubmittedData">
+                <table>
+                    <tr>
+                        <th>Your Height</th>
+                        <th>Your Weight</th>
+                        <th>Your riding style</th>
+                    </tr>
+                    <tr>
+                        <td>{{height}}</td>
+                        <td>{{weight}}</td>
+                        <td>{{ridingStyle}}</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </script>
+
+    <script type="text/x-template" id="input-riding-style-item">
+        <div>
+            <input type="range" min="120" max="210" id="height" v-model="riderHeight">
+            <label for="height">Your Height: {{ riderHeight }}</label>
+            <br>
+            <input type="range" min="10" max="120" id="weight" v-model="riderWeight">
+            <label for="weight">Your Weight: {{ riderWeight }}</label>
+            <br>
+            <select name="ridingStyle" id="riding-style" v-model="selectedRidingStyle">
+                <option v-for="ridingStyle in ridingStyles" :key="ridingStyle.index" :value="ridingStyle">{{ ridingStyle }}</option>
+            </select>
+            <label for="riding-style">Your Riding Style</label>
+            <br>
+            <br>
+            <button type="submit" @click="submit">Submit Data</button>
+        </div>
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
